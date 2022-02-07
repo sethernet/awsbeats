@@ -68,7 +68,7 @@ func (client *client) Connect() error {
 
 func (client *client) Publish(batch publisher.Batch) error {
 	events := batch.Events()
-	rest, _ := client.publishEvents(events)
+	rest, err := client.publishEvents(events)
 	if len(rest) == 0 {
 		// We have to ACK only when all the submission succeeded
 		// Ref: https://github.com/elastic/beats/blob/c4af03c51373c1de7daaca660f5d21b3f602771c/libbeat/outputs/elasticsearch/client.go#L232
@@ -80,7 +80,7 @@ func (client *client) Publish(batch publisher.Batch) error {
 	}
 	// This shouldn't be an error object according to other official beats' implementations
 	// Ref: https://github.com/elastic/beats/blob/c4af03c51373c1de7daaca660f5d21b3f602771c/libbeat/outputs/kafka/client.go#L119
-	return nil
+	return err
 }
 
 func (client *client) publishEvents(events []publisher.Event) ([]publisher.Event, error) {
